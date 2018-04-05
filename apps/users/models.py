@@ -20,19 +20,22 @@ class UserProfile(AbstractUser):
         verbose_name = "用户信息"
         verbose_name_plural = verbose_name
 
-    def __unicode__(self):
+    def __str__(self):
         return self.username
 
 
 class EmailVerifyRecord(models.Model):
     code = models.CharField(max_length=20, verbose_name=u"验证码")
-    email = models.EmailField(max_length=50, verbose_name=u"验证码")
-    send_type = models.CharField(choices=(('register', "注册"), ('forget', u"找回密码")), max_length=10, verbose_name=u"验证码")
-    send_time = models.DateTimeField(default=datetime.now)  # now必须把括号去掉
+    email = models.EmailField(max_length=50, verbose_name=u"邮箱")
+    send_type = models.CharField(choices=(('register', "注册"), ('forget', u"找回密码")), max_length=10, verbose_name=u"发送类型")
+    send_time = models.DateTimeField(default=datetime.now, verbose_name=u"发送时间")  # now必须把括号去掉
 
     class Meta:
         verbose_name = "邮箱验证码"
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return '{0}({1})'.format(self.code, self.email)
 
 
 class Banner(models.Model):
