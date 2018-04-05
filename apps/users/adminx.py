@@ -12,6 +12,12 @@ class BaseSetting(object):
     use_bootswatch = True
 
 
+class GlobalSettings(object):
+    site_title = "杨泽后台管理系统"  # 设置头部logo文字
+    site_footer = "杨泽就是你们老大"  # 设置底部公司
+    menu_style = "accordion"  # 设置菜单折叠
+
+
 class EmailVerifyRecordAdmin(object):
     search_fields = ['code', 'email', 'send_type']
     list_display = ['code', 'email', 'send_type', 'send_time']
@@ -27,3 +33,4 @@ class BannerAdmin(object):
 xadmin.site.register(EmailVerifyRecord, EmailVerifyRecordAdmin)
 xadmin.site.register(Banner, BannerAdmin)
 xadmin.site.register(views.BaseAdminView, BaseSetting)
+xadmin.site.register(views.CommAdminView, GlobalSettings)
