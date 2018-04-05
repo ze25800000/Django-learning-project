@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'MxOnline.apps.MxonlineConfig',
     'users',
-    'courses'
+    'courses',
+    'operation',
+    'organization',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -50,7 +52,9 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'users',
-    'courses'
+    'courses',
+    'operation',
+    'organization',
 ]
 
 AUTH_USER_MODEL = "users.UserProfile"
