@@ -21,6 +21,8 @@ urlpatterns = [
     url(r'^ModifyPwdView/$', ModifyPwdView.as_view(), name='modify_pwd'),
     # 课程机构url配置
     url(r'^org/', include('organization.urls', namespace='org')),
+    # 课程列表页
+    url(r'^course/', include('courses.urls', namespace='course')),
 
     url(r'^org_list/$', OrgListView.as_view(), name='org_list')
 ]
