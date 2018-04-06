@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="index.html"), name="index"),
     # 配置上传文件的访问处理
     url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
+
     url(r'^login/$', LoginView.as_view(), name="login"),
     url(r'^register/$', RegisterView.as_view(), name="register"),
     url(r'^captcha/', include('captcha.urls')),
@@ -18,6 +19,8 @@ urlpatterns = [
     url(r'^forget/$', ForgetPwdView.as_view(), name='forget_pwd'),
     url(r'^reset/(?P<active_code>.*)/$', ResetView.as_view(), name='resetpwd'),
     url(r'^ModifyPwdView/$', ModifyPwdView.as_view(), name='modify_pwd'),
+    # 课程机构url配置
+    url(r'^org/', include('organization.urls', namespace='org')),
 
     url(r'^org_list/$', OrgListView.as_view(), name='org_list')
 ]
