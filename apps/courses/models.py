@@ -32,25 +32,35 @@ class Course(models.Model):
     def get_learn_users(self):
         return self.usercourse_set.all()[:5]
 
+    def get_course_lesson(self):
+        return self.lesson_set.all()
+
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, verbose_name=u"课程")
-    name = models.CharField(max_length=100, verbose_name=u"章节数")
+    name = models.CharField(max_length=100, verbose_name=u"章节名称")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
 
     class Meta:
         verbose_name = u"章节信息"
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
+
 
 class Video(models.Model):
     lesson = models.ForeignKey(Lesson, verbose_name=u'章节')
     name = models.CharField(max_length=100, verbose_name=u"视频名称")
+    url = models.CharField(max_length=200, verbose_name='视频地址', default='')
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
 
     class Meta:
         verbose_name = u"视频信息"
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
 
 
 class CourseResource(models.Model):
@@ -62,3 +72,6 @@ class CourseResource(models.Model):
     class Meta:
         verbose_name = u"课程信息"
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
