@@ -3,9 +3,9 @@ __author__ = 'yangze'
 __date__ = '2018/4/7  5:26'
 
 from django.conf.urls import url
-from .views import CourseListView
+from .views import CourseListView, CourseDetailView
 
 urlpatterns = [
     url(r'^list/$', CourseListView.as_view(), name='course_list'),
-    # url(r'^home/(?P<org_id>\d+)/$', OrgHomeView.as_view(), name='org_home'),
+    url(r'^detail/(?P<course_id>\d+)/$', CourseDetailView.as_view(), name='course_detail'),
 ]
