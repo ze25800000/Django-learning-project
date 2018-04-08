@@ -208,3 +208,23 @@ class TeacherListView(View):
             'sort': sort,
             "sorted_teacher": sorted_teacher
         })
+
+
+class TeacherDetailView(View):
+    def get(self, request, teacher_id):
+        teacher = Teacher.objects.get(id=int(teacher_id))
+        sorted_teacher = Teacher.objects.all().order_by('-click_nums')[:3]
+
+        has_teacher_faved = False
+        if UserFavorite.objects.filter(user=request.user, fav_type=3, fav_id=int(teacher.id)):
+            has_teacher_faved = True
+        has_org_faved = False
+        if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=int(teacher.org.id)):
+            has_org_faved = True
+
+        return render(request, 'teacher-detail.html', {
+            "teacher": teacher,
+            "sorted_teacher": sorted_teacher,
+            "has_teacher_faved": has_teacher_faved,
+            "has_org_faved": has_org_faved
+        })

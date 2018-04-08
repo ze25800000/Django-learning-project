@@ -3,7 +3,7 @@ __author__ = 'yangze'
 __date__ = '2018/4/6 0006 13:03'
 from django.conf.urls import url
 from .views import OrgListView, AddUserAskView, OrgHomeView, OrgCourseView, OrgDescView, OrgTeacherView, AddFavView, \
-    TeacherListView
+    TeacherListView, TeacherDetailView
 
 urlpatterns = [
     url(r'^list/$', OrgListView.as_view(), name='org_list'),
@@ -15,6 +15,8 @@ urlpatterns = [
 
     # 讲师列表页面
     url(r'^teacher/list/$', TeacherListView.as_view(), name='teacher_list'),
+    # 讲师列表页面
+    url(r'^teacher/detail/(?P<teacher_id>\d+)/$', TeacherDetailView.as_view(), name='teacher_detail'),
     # 机构收藏
     url(r'^add_fav/$', AddFavView.as_view(), name='add_fav'),
 ]
