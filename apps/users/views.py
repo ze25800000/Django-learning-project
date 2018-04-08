@@ -9,6 +9,7 @@ from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm
 from utils.email_send import send_register_email
 from utils.mixin_urls import LoginRequiredMixin
+from .forms import UploadImageForm
 
 
 class CustomBackend(ModelBackend):
@@ -130,3 +131,18 @@ class ModifyPwdView(View):
 class UserInfoView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'usercenter-info.html', {})
+
+
+class ImageUploadView(LoginRequiredMixin, View):
+    """用户修改头像"""
+
+    # def post(self, request):
+    #     image_form = UploadImageForm(request.POST, request.FILES)
+    #     if image_form.is_valid():
+    #         image = image_form.cleaned_data['image']
+    #         request.user.image = image
+    #         request.user.save()
+    def post(self, request):
+        image_form = UploadImageForm(request.POST, request.FILES, instance=request.user)
+        if image_form.is_valid():
+            image_form.save()
