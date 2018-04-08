@@ -27,6 +27,7 @@
 
                     {% if request.user.is_authenticated %}
                         <div class="top">
+
                             <div class="personal">
                                 <dl class="user fr">
                                     <dd>{{ request.user.username }}<img class="down fr"
@@ -48,6 +49,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="msg-num"><span id="MsgNum">{{ request.user.get_unread_nums }}</span></div>
                         </div>
                     {% else %}
                         <div class="top">

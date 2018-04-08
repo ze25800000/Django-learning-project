@@ -52,6 +52,8 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="msg-num"><span id="MsgNum">{{ request.user.get_unread_nums }}</span></div>
+
                     {% else %}
                         <div class="top">
                             <div class="wp">
@@ -67,7 +69,7 @@
                         </div>
                     {% endif %}
                     <a href="usercenter-message.html">
-                        <div class="msg-num"><span id="MsgNum">0</span></div>
+                        <div class="msg-num"><span id="MsgNum">{{ request.user.get_unread_nums }}</span></div>
                     </a>
 
 

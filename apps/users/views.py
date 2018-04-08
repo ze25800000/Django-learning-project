@@ -6,13 +6,14 @@ from django.db.models import Q  # 并集查询
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
+from pure_pagination import Paginator, PageNotAnInteger
 
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm
 from utils.email_send import send_register_email
 from utils.mixin_urls import LoginRequiredMixin
 from .forms import UploadImageForm, UserInfoForm
-from operation.models import UserCourse, UserFavorite
+from operation.models import UserCourse, UserFavorite, UserMessage
 from organization.models import CourseOrg, Teacher
 from courses.models import Course
 
@@ -60,6 +61,13 @@ class RegisterView(View):
                 user_profile.password = make_password(pass_word)
                 user_profile.is_active = False
                 user_profile.save()
+
+                # 写入用户注册成功的消息
+                user_message = UserMessage()
+                user_message.user = user_profile.id
+                user_message.message = '欢迎注册暮雪网在线网'
+                user_message.save()
+
                 send_register_email(user_name, "register")
                 return render(request, 'login.html')
         else:
@@ -255,6 +263,22 @@ class MyFavCourseView(LoginRequiredMixin, View):
 
 
 class UserMessageView(LoginRequiredMixin, View):
+    """我的信息"""
+
     def get(self, request):
-        """我的信息"""
-        return render(request, 'usercenter-message.html', {})
+        all_message = UserMessage.objects.filter(user=request.user.id)
+        message_num = all_message.count()
+
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_message, 9, request=request)
+
+        message = p.page(page)
+
+        return render(request, 'usercenter-message.html', {
+            "all_message": message,
+            "message_num": message_num
+        })
