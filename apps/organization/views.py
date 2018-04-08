@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse
+from django.db.models import Q
 from pure_pagination import Paginator, PageNotAnInteger
 # from courses.models import Course
 from .models import CourseOrg, CityDict, Teacher
@@ -12,6 +13,12 @@ from operation.models import UserFavorite
 class OrgListView(View):
     def get(self, request):
         all_orgs = CourseOrg.objects.all()
+
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            all_orgs = all_orgs.filter(
+                Q(name__icontains=search_keywords) | Q(desc__icontains=search_keywords))  # i代表不区分大小写
+
         all_cities = CityDict.objects.all()
         # 授课机构排名
         hot_orgs = all_orgs.order_by('click_nums')[:3]
@@ -120,7 +127,7 @@ class OrgDescView(View):
     def get(self, request, org_id):
         has_fav = False
         if request.user.is_authenticated():
-            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+            if UserFavorite.objects.filter(user=request.user, fav_id=int(org_id), fav_type=2):
                 has_fav = True
         current_page = "desc"
         course_org = CourseOrg.objects.get(id=int(org_id))
@@ -139,7 +146,7 @@ class OrgTeacherView(View):
     def get(self, request, org_id):
         has_fav = False
         if request.user.is_authenticated():
-            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+            if UserFavorite.objects.filter(user=request.user, fav_id=int(org_id), fav_type=2):
                 has_fav = True
         current_page = "teacher"
         course_org = CourseOrg.objects.get(id=int(org_id))
@@ -185,6 +192,12 @@ class TeacherListView(View):
 
     def get(self, request):
         all_teachers = Teacher.objects.all()
+
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            all_teachers = all_teachers.filter(
+                Q(work_years__icontains=search_keywords) | Q(name__icontains=search_keywords) | Q(
+                    work_position__icontains=search_keywords))  # i代表不区分大小写
 
         teacher_nums = all_teachers.count()
 
