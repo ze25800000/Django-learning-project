@@ -11,7 +11,7 @@ from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm
 from utils.email_send import send_register_email
 from utils.mixin_urls import LoginRequiredMixin
-from .forms import UploadImageForm
+from .forms import UploadImageForm, UserInfoForm
 
 
 class CustomBackend(ModelBackend):
@@ -136,6 +136,14 @@ class UserInfoView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'usercenter-info.html', {})
 
+    def post(self, request):
+        user_info_form = UserInfoForm(request.POST, instance=request.user)  # 如果不加instance，将怎讲数据，而不是修改
+        if user_info_form.is_valid():
+            user_info_form.save()
+            return HttpResponse("{'status':'success'}", content_type='application/json')
+        else:
+            return HttpResponse(json.dumps(user_info_form.errors), content_type='application/json')
+
 
 class ImageUploadView(LoginRequiredMixin, View):
     """用户修改头像"""
@@ -189,3 +197,12 @@ class UpdateEmailView(LoginRequiredMixin, View):
     """修改个人邮箱"""
 
     def post(self, request):
+        email = request.POST.get('email', '')
+        code = request.POST.get('code', '')
+        existed_records = EmailVerifyRecord.objects.filter(email=email, code=code, send_type='update_email')
+        if existed_records:
+            user = request.user
+            user.email = email
+            user.save()
+        else:
+            return HttpResponse("{'email':'验证码出错'}", content_type='application/json')
