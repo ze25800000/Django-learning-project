@@ -3,6 +3,7 @@ from django.db import models
 
 from users.models import UserProfile
 from courses.models import Course
+from organization.models import CourseOrg
 
 
 # Create your models here.

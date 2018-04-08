@@ -12,6 +12,9 @@ from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm
 from utils.email_send import send_register_email
 from utils.mixin_urls import LoginRequiredMixin
 from .forms import UploadImageForm, UserInfoForm
+from operation.models import UserCourse, UserFavorite
+from organization.models import CourseOrg, Teacher
+from courses.models import Course
 
 
 class CustomBackend(ModelBackend):
@@ -206,3 +209,52 @@ class UpdateEmailView(LoginRequiredMixin, View):
             user.save()
         else:
             return HttpResponse("{'email':'验证码出错'}", content_type='application/json')
+
+
+class UserCourseView(LoginRequiredMixin, View):
+    def get(self, request):
+        """我的课程"""
+        user_courses = UserCourse.objects.filter(user=request.user)
+        return render(request, 'usercenter-mycourse.html', {
+            "user_courses": user_courses
+        })
+
+
+class MyFavOrgView(LoginRequiredMixin, View):
+    """我收藏的课程机构"""
+
+    def get(self, request):
+        user_org_favs = UserFavorite.objects.filter(user=request.user, fav_type=2)
+        org_ids = [user_org_fav.fav_id for user_org_fav in user_org_favs]
+        user_orgs = CourseOrg.objects.filter(id__in=org_ids)
+        return render(request, 'usercenter-fav-org.html', {
+            'user_fav_orgs': user_orgs
+        })
+
+
+class MyFavTeacherView(LoginRequiredMixin, View):
+    def get(self, request):
+        """我收藏的授课教师"""
+        user_teacher_favs = UserFavorite.objects.filter(user=request.user, fav_type=3)
+        teacher_ids = [user_teacher_fav.fav_id for user_teacher_fav in user_teacher_favs]
+        user_teachers = Teacher.objects.filter(id__in=teacher_ids)
+        return render(request, 'usercenter-fav-teacher.html', {
+            "user_teachers": user_teachers
+        })
+
+
+class MyFavCourseView(LoginRequiredMixin, View):
+    def get(self, request):
+        """我收藏的公开课"""
+        user_course_favs = UserFavorite.objects.filter(user=request.user, fav_type=1)
+        course_ids = [user_course_fav.fav_id for user_course_fav in user_course_favs]
+        user_courses = Course.objects.filter(id__in=course_ids)
+        return render(request, 'usercenter-fav-course.html', {
+            'user_courses': user_courses
+        })
+
+
+class UserMessageView(LoginRequiredMixin, View):
+    def get(self, request):
+        """我的信息"""
+        return render(request, 'usercenter-message.html', {})
