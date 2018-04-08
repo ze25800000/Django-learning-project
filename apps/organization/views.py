@@ -50,7 +50,7 @@ class OrgListView(View):
             'city_id': city_id,
             'category': category,
             'hot_orgs': hot_orgs,
-            'sort': sort
+            'sort': sort,
         })
 
 
@@ -185,6 +185,7 @@ class TeacherListView(View):
 
     def get(self, request):
         all_teachers = Teacher.objects.all()
+
         teacher_nums = all_teachers.count()
 
         sort = request.GET.get('sort', '')
@@ -206,7 +207,7 @@ class TeacherListView(View):
             'all_teachers': all_teachers,
             'teacher_nums': teacher_nums,
             'sort': sort,
-            "sorted_teacher": sorted_teacher
+            "sorted_teacher": sorted_teacher,
         })
 
 
