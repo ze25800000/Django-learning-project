@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from django.views.static import serve
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView, LogoutView, \
     IndexView
-from moxuepython.settings import MEDIA_ROOT, STATIC_ROOT
+from moxuepython.settings import MEDIA_ROOT
 import xadmin
 
 urlpatterns = [
@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^$', IndexView.as_view(), name="index"),
     # 配置上传文件的访问处理
     url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
-    url(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
+    # url(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
     url(r'^login/$', LoginView.as_view(), name="login"),
     url(r'^logout/$', LogoutView.as_view(), name="logout"),
     url(r'^register/$', RegisterView.as_view(), name="register"),
