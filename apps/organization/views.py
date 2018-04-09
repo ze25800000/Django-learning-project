@@ -107,12 +107,12 @@ class OrgCourseView(View):
     """
 
     def get(self, request, org_id):
+        current_page = "course"
+        course_org = CourseOrg.objects.get(id=int(org_id))
         has_fav = False
         if request.user.is_authenticated():
             if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
                 has_fav = True
-        current_page = "course"
-        course_org = CourseOrg.objects.get(id=int(org_id))
         all_courses = course_org.course_set.all()
         return render(request, 'org-detail-course.html', {
             'all_courses': all_courses,
