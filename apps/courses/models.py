@@ -33,6 +33,8 @@ class Course(models.Model):
     def get_zj_nums(self):
         return self.lesson_set.all().count()
 
+    get_zj_nums.short_description = '章节数'
+
     def get_learn_users(self):
         return self.usercourse_set.all()[:5]
 
