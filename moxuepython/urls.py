@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^course/', include('courses.urls', namespace='course')),
     # 个人中心
     url(r'^users/', include('users.urls', namespace='users')),
+    # 富文本相关url
+    url(r'^ueditor/', include('DjangoUeditor.urls'))
 ]
 # 全局404页面配置
 handler404 = 'users.views.page_not_found'
