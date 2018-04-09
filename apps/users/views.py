@@ -5,7 +5,8 @@ from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q  # 并集查询
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponse
+from django.contrib.auth import logout
+from django.http import HttpResponse, HttpResponseRedirect
 from pure_pagination import Paginator, PageNotAnInteger
 
 from .models import UserProfile, EmailVerifyRecord
@@ -94,6 +95,13 @@ class LoginView(View):
                 return render(request, 'login.html', {"msg": '用户名或密码错误'})
         else:
             return render(request, 'login.html', {'login_form': login_form})
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        from django.core.urlresolvers import reverse
+        return HttpResponseRedirect(reverse('index'))
 
 
 class ForgetPwdView(View):
@@ -267,6 +275,12 @@ class UserMessageView(LoginRequiredMixin, View):
 
     def get(self, request):
         all_message = UserMessage.objects.filter(user=request.user.id)
+
+        all_unread_messages = UserMessage.objects.filter(user=request.user.id, has_read=False)
+        for unread_message in all_unread_messages:
+            unread_message.has_read = True
+            unread_message.save()
+
         message_num = all_message.count()
 
         try:
