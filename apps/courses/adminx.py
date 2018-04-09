@@ -11,6 +11,9 @@ class CourseAdmin(object):
                     'add_time']
     list_filter = ['name', 'desc', 'detail', 'degree', 'learn_times', 'students', 'fav_nums', 'image', 'click_nums',
                    'add_time']
+    ordering = ['-click_nums']
+    readonly_fields = ['click_nums']
+    exclude = ['fav_nums']
 
 
 class LessonAdmin(object):

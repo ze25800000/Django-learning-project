@@ -22,12 +22,14 @@ class EmailVerifyRecordAdmin(object):
     search_fields = ['code', 'email', 'send_type']
     list_display = ['code', 'email', 'send_type', 'send_time']
     list_filter = ['code', 'email', 'send_type', 'send_time']
+    model_icon = 'fa fa-address-book'
 
 
 class BannerAdmin(object):
     search_fields = ['title', 'image', 'url', 'index']
     list_display = ['title', 'image', 'url', 'index', 'add_time']
     list_filter = ['title', 'image', 'url', 'index', 'add_time']
+    model_icon = 'fa fa-address-book'
 
 
 xadmin.site.register(EmailVerifyRecord, EmailVerifyRecordAdmin)
